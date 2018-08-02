@@ -1,3 +1,15 @@
+#ifndef thread_pool_hpp
+#define thread_pool_hpp
+
+#include <iostream>
+// #include "ra/thead_pool.hpp"
+#include "ra/queue.hpp"
+#include <thread>
+#include <iostream>
+#include <cstdlib>
+#include <vector>
+#include <functional>
+
 namespace ra :: concurrency {
 // Thread pool class.
 class thread_pool
@@ -19,7 +31,7 @@ class thread_pool
   thread_pool & operator=( thread_pool &&) = delete;
   // Destroys a thread pool, shutting down the thread pool first
   // (if not already shutdown).
-  ˜ thread_pool ();
+  ~thread_pool ();
   // Gets the number of threads in the thread pool.
   // This function is not thread safe.
   size_type size () const;
@@ -43,5 +55,20 @@ class thread_pool
   // Tests if the thread pool has been shutdown.
   // This function is not thread safe.
   bool is_shutdown () const;
+
+  private:
+
+   private:
+
+    size_type thread_no;
+    ra::concurrency::queue<std::function<void()>> _queue;
+    std::vector <std::unique_ptr<std::thread>>  pool;
+    mutable std::mutex _m;
+    mutable std::condition_variable _cv;
+    bool _shutdown;
+    void make_thread();
+
 };
 }
+
+#endif

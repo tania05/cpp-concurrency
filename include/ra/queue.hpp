@@ -168,7 +168,7 @@ class queue
          _queue->pop(); 
         }
         lock.unlock();
-        // _cv.notify_one();
+        _cv.notify_one();
       }
       
       // Returns if the queue is currently full (i.e., the number of

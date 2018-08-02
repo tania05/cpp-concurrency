@@ -6,11 +6,11 @@ project(cpp_containers LANGUAGES CXX)
 
 
 add_executable(test_queue app/test_queue.cpp include/ra/queue.hpp)
-#add_executable(test_thread_pool app/test_thread_pool.cpp include/ra/thread_pool.hpp lib/thread_pool.cpp)
+add_executable(test_thread_pool app/test_thread_pool.cpp include/ra/thread_pool.hpp lib/thread_pool.cpp)
 #add_executable(test_julia_set app/test_julia_set.cpp include/ra/julia_set.hpp)
 
 target_include_directories(test_queue PUBLIC include "${CMAKE_CURRENT_BINARY_DIR}/include")
-#target_include_directories(test_thread_pool PUBLIC include "${CMAKE_CURRENT_BINARY_DIR}/include")
+target_include_directories(test_thread_pool PUBLIC include "${CMAKE_CURRENT_BINARY_DIR}/include")
 #target_include_directories(test_julia_set PUBLIC include "${CMAKE_CURRENT_BINARY_DIR}/include")
 
 option(ENABLE_ASAN "Initial Address Sanitizer" false)
