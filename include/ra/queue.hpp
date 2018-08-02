@@ -33,7 +33,7 @@ class queue
       // zero.
       queue ( size_type max_size ) : _max_size(max_size), _closed(false)
       {
-        &_queue = new std::queue<T>();
+        _queue = new std::queue<T>();
       }
 
       // A queue is not movable or copyable.
@@ -48,7 +48,7 @@ class queue
       {
         close();
         clear();
-        std::destroy(&_queue);
+        delete _queue;
       }
       
       // Inserts the value x at the end of the queue, blocking if
@@ -68,24 +68,37 @@ class queue
       //TODO: MAKE THREAD SAFE
       status push ( value_type && x )
       {
-        std::unique_lock lock(_queue_mutex, std::defer_lock);
+        // std::cout << "MAde it to push" << std::endl;
+        std::unique_lock lock(_queue_mutex);
+        // std::cout << "Mee 2" << std::endl;
         
         _cv.wait(lock, [this] () {return !is_full() || _closed;});
+        // std::cout << "Mee 3" << std::endl;
+        
         status result = status::success;
+        // std::cout << "Mee 4" << std::endl;
         
         if(_closed)
         {
           result = status::closed;
+        // std::cout << "Mee 5" << std::endl;
+          
         }
         else
         {
-          _queue.push(x);
+          _queue->push(x);
+        // std::cout << "Mee 7" << std::endl;
+          
 
         }
+        // std::cout << "Mee 8" << std::endl;
+        
         lock.unlock();
+        // std::cout << "Mee 9" << std::endl;        
         _cv.notify_one();
+        // std::cout << "Mee 10" << std::endl;        
+        
         return result;
-
       }
       
       // Removes the value from the front of the queue and places it
@@ -115,8 +128,8 @@ class queue
         }
         else
         {
-          x = _queue.front();
-          _queue.pop();
+          x = _queue->front();
+          _queue->pop();
         }
         lock.unlock();
         _cv.notify_one();
@@ -131,8 +144,10 @@ class queue
       // This function is thread safe.
       void close ()
       {
-        std::unique_lock lock(_queue_mutex, std::defer_lock);
-        _cv.wait(lock);
+        // std::cout << "Uou are here" << std::endl;
+        std::unique_lock lock(_queue_mutex);
+        // _cv.wait(lock);
+        // lock.lock();
         _closed = true;
         lock.unlock();
         _cv.notify_one();
@@ -144,14 +159,16 @@ class queue
       //TODO: MAKE IT THREAD SAFE
       void clear ()
       {
-        std::unique_lock lock(_queue_mutex, std::defer_lock);
-        _cv.wait(lock);
+        // std::cout << "Uou are clear" << std::endl;
+        
+        std::unique_lock lock(_queue_mutex);
+        // lock.lock();
         while(!is_empty())
         {
-         _queue.pop(); 
+         _queue->pop(); 
         }
         lock.unlock();
-        _cv.notify_one();
+        // _cv.notify_one();
       }
       
       // Returns if the queue is currently full (i.e., the number of
@@ -159,14 +176,14 @@ class queue
       // This function is not thread safe.
       bool is_full () const
       {
-        return _queue.size() == _max_size;
+        return _queue->size() == _max_size;
       }
       
       // Returns if the queue is currently empty.
       // This function is not thread safe.
       bool is_empty () const
       {
-        return _queue.empty();
+        return _queue->empty();
       }
       
       // Returns if the queue is closed (i.e., in the closed state).
@@ -186,7 +203,7 @@ class queue
       
     private:
       size_t _max_size;
-      std::queue<T> _queue;
+      std::queue<T> * _queue;
       bool _closed; 
       mutable std::mutex _queue_mutex;
       // mutable std::condition_variable _e; //not empty or full
