@@ -40,7 +40,7 @@ namespace ra:: concurrency {
   thread_pool::~thread_pool ()
   {
     shutdown();
-    // delete &thread_pool::pool;
+    delete &pool;
   }
   
   // Gets the number of threads in the thread pool.
