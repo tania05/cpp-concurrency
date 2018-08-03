@@ -93,7 +93,7 @@ class queue
         }
         // std::cout << "Mee 8" << std::endl;
         
-        lock.unlock();
+        // lock.unlock();
         // std::cout << "Mee 9" << std::endl;        
         _cv.notify_one();
         // std::cout << "Mee 10" << std::endl;        
@@ -131,7 +131,7 @@ class queue
           x = _queue->front();
           _queue->pop();
         }
-        lock.unlock();
+        // lock.unlock();
         _cv.notify_one();
         return result;
       }
@@ -146,10 +146,10 @@ class queue
       {
         // std::cout << "Uou are here" << std::endl;
         std::unique_lock lock(_queue_mutex);
-        // _cv.wait(lock);
+        // _cv.wait(lock, [this](){return true;});
         // lock.lock();
         _closed = true;
-        lock.unlock();
+        // lock.unlock();
         _cv.notify_one();
       }
       
@@ -163,11 +163,12 @@ class queue
         
         std::unique_lock lock(_queue_mutex);
         // lock.lock();
+        // _cv.wait(lock,[](){return true;});
         while(!is_empty())
         {
          _queue->pop(); 
         }
-        lock.unlock();
+        // lock.unlock();
         _cv.notify_one();
       }
       

@@ -13,6 +13,11 @@ target_include_directories(test_queue PUBLIC include "${CMAKE_CURRENT_BINARY_DIR
 target_include_directories(test_thread_pool PUBLIC include "${CMAKE_CURRENT_BINARY_DIR}/include")
 #target_include_directories(test_julia_set PUBLIC include "${CMAKE_CURRENT_BINARY_DIR}/include")
 
+find_package(Boost REQUIRED COMPONENTS)
+
+#target_link_libraries(test_julia_set PUBLIC ${Boost_LIBRARIES})
+#target_include_directories(test_julia_set PUBLIC ${Boost_INCLUDE_DIRS})
+
 option(ENABLE_ASAN "Initial Address Sanitizer" false)
 if (ENABLE_ASAN)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
