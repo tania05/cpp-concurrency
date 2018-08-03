@@ -58,15 +58,13 @@ class thread_pool
 
   private:
 
-   private:
-
-    size_type thread_no;
-    ra::concurrency::queue<std::function<void()>> _queue;
-    std::vector <std::unique_ptr<std::thread>>  pool;
-    mutable std::mutex _m;
-    mutable std::condition_variable _cv;
-    bool _shutdown;
-    void make_thread();
+  size_type thread_no;
+  ra::concurrency::queue<std::function<void()>> _queue;
+  std::vector <std::unique_ptr<std::thread>>  pool;
+  mutable std::mutex _m;
+  mutable std::condition_variable _cv;
+  bool _shutdown;
+  void make_thread();
 
 };
 }

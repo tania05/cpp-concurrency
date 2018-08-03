@@ -116,7 +116,7 @@ std::complex<Real> get_z(Real u_0, Real u_1, Real v_0, Real v_1, int l, int k, i
           a[i][k] = y_m(max_iters,z,c);
         }
         // std::cout << "dd" << std::endl;
-        mcout.unlock();
+        // mcout.unlock();
       });
     }
 

@@ -6,7 +6,7 @@ int main()
 
   ra::concurrency::thread_pool tp(6);
   std::mutex  mcout;
-  tp.shutdown();
+  // tp.shutdown();
   tp.schedule([&mcout]() 
   {
     for (int i=0; i< 10; ++i)

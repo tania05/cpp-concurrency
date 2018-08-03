@@ -129,7 +129,7 @@ public:
 		// std::cout << "Uou are here" << std::endl;
 		std::unique_lock<std::mutex> lock(_queue_mutex);
 		_closed = true;
-    _cv.notify_one();
+    _cv.notify_all();
 	}
 
 	// Clears the queue.
@@ -142,6 +142,7 @@ public:
 		{
 			_queue->pop();
 		}
+    _cv.notify_one();
 	}
 
 	// Returns if the queue is currently full (i.e., the number of
