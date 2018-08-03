@@ -45,12 +45,12 @@ int main()
   std::complex<float> c(0.37, -0.16);
   
   auto start = std::chrono::system_clock::now();
-  ra::fractal::compute_julia_set (bottom_left, top_right, c, max_iters, a, 9);
+  ra::fractal::compute_julia_set (bottom_left, top_right, c, max_iters, a, 8);
   auto end = std::chrono::system_clock::now();
 
   auto diff = std::chrono::duration_cast<std::chrono::microseconds> (end-start);
-  std::cout << diff.count() << std::endl;
-  // std::cout << make_plot(a);
+  // std::cout << diff.count() << std::endl;
+  std::cout << make_plot(a);
   // auto z = std::complex<float>(-1.25,-1.25);
   // auto c = std::complex<float>(1,1);
   
