@@ -90,14 +90,14 @@ std::complex<Real> get_z(Real u_0, Real u_1, Real v_0, Real v_1, int l, int k, i
                           int num_threads )
   {
     ra::concurrency::thread_pool tp2(num_threads);
-    std::mutex  mcout;
+    // std::mutex  mcout;
     int H = a.shape()[0];
     int W = a.shape()[1];
     //get the row -> height H
     for (int i = H-1; i >= 0; --i)
     {
       // std::cout << i << std::endl;
-      tp2.schedule([i, &mcout, bottom_left, top_right, H, W, max_iters, c, &a]() {
+      tp2.schedule([i, bottom_left, top_right, H, W, max_iters, c, &a]() {
         // mcout.lock();
         //for each column in the row -> width H
         for (int k = 0; k < W; ++k)
