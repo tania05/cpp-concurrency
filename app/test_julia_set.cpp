@@ -44,10 +44,10 @@ int main()
   int max_iters = 255;
   std::complex<float> c(0.37, -0.16);
   
-  ra::fractal::compute_julia_set (bottom_left, top_right, c, max_iters, a, 1);
+  ra::fractal::compute_julia_set (bottom_left, top_right, c, max_iters, a, 8);
   
   std::cout << make_plot(a);
-  // auto z = std::complex<float>(0,0);
+  // auto z = std::complex<float>(-1.25,-1.25);
   // auto c = std::complex<float>(1,1);
   
   // std::cout << ra::fractal::y_m<float>(255, z, c) << std::endl;

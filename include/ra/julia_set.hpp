@@ -56,10 +56,13 @@ int  y_m(int m, std::complex <Real> z, const std::complex <Real>& c)
 
 
 template <class Real>
-std::complex<Real> get_z(Real u_0, Real u_1, Real v_0, Real v_1, std::size_t l, std::size_t k, std::size_t H, std::size_t W)
+std::complex<Real> get_z(Real u_0, Real u_1, Real v_0, Real v_1, int l, int k, int H, int W)
 {
-  Real re = u_0 + (k/(W-1))*(v_0 - u_0);
-  Real im = u_1 + (l/(H-1))*(v_1 - u_1);
+  // std::cout << "Insize get z" << std::endl;
+  // std::cout << l << std::endl;
+  // std::cout << k << std::endl;
+  Real re = u_0 + ((Real)k/(Real)(W-1))*(v_0 - u_0);
+  Real im = u_1 + ((Real)l/(Real)(H-1))*(v_1 - u_1);
   
   // Real re = k;
   // Real im = l;
@@ -88,18 +91,16 @@ std::complex<Real> get_z(Real u_0, Real u_1, Real v_0, Real v_1, std::size_t l, 
   {
     ra::concurrency::thread_pool tp2(num_threads);
     std::mutex  mcout;
-    std::size_t H = a.shape()[0];
-    std::size_t W = a.shape()[1];
+    int H = a.shape()[0];
+    int W = a.shape()[1];
     //get the row -> height H
-    for (std::size_t i = 0; i < H; ++i)
+    for (int i = H-1; i >= 0; --i)
     {
+      // std::cout << i << std::endl;
       tp2.schedule([i, &mcout, bottom_left, top_right, H, W, max_iters, c, &a]() {
-        
-        //delay
-        // for (int j = 0; j < 100; ++j);
-        mcout.lock();
+        // mcout.lock();
         //for each column in the row -> width H
-        for (std::size_t k = 0; k < W; ++k)
+        for (int k = 0; k < W; ++k)
         {
           //get z for each point
           std::complex <Real> z = get_z(bottom_left.real(), 
@@ -113,10 +114,8 @@ std::complex<Real> get_z(Real u_0, Real u_1, Real v_0, Real v_1, std::size_t l, 
                                               );
 
           a[i][k] = y_m(max_iters,z,c);
-          
-          // std::cout << a[i][k] << std::endl;
         }
-
+        // std::cout << "dd" << std::endl;
         mcout.unlock();
       });
     }
